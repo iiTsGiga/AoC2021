@@ -67,7 +67,7 @@ public class Day13 extends AbstractDay {
     }
 
     private boolean[][] foldPaper(boolean[][] paper, int foldIndex) {
-        boolean[][] newPaper = null;
+        boolean[][] newPaper;
         if (foldDirections[foldIndex] == Direction.WEST) {
             int fx = foldCoordinates[foldIndex];
             newPaper = new boolean[paper.length][fx];
