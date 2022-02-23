@@ -69,17 +69,17 @@ public class Day13 extends AbstractDay {
     private boolean[][] foldPaper(boolean[][] paper, int foldIndex) {
         boolean[][] newPaper;
         if (foldDirections[foldIndex] == Direction.WEST) {
-            int fx = foldCoordinates[foldIndex];
-            newPaper = new boolean[paper.length][fx];
+            int foldX = foldCoordinates[foldIndex];
+            newPaper = new boolean[paper.length][foldX];
             for (int y = 0; y < newPaper.length; y++)
-                for (int x = 0; x < fx && fx+1+x < paper[0].length; x++)
-                    newPaper[y][fx-1-x] = paper[y][fx-1-x] || paper[y][fx+1+x];
+                for (int x = 0; x < foldX && foldX+1+x < paper[0].length; x++)
+                    newPaper[y][foldX-1-x] = paper[y][foldX-1-x] || paper[y][foldX+1+x];
         } else {
-            int fy = foldCoordinates[foldIndex];
-            newPaper = new boolean[fy][paper[0].length];
+            int foldY = foldCoordinates[foldIndex];
+            newPaper = new boolean[foldY][paper[0].length];
             for (int x = 0; x < newPaper[0].length; x++)
-                for (int y = 0; y < fy && fy+1+y < paper.length; y++)
-                    newPaper[fy-1-y][x] = paper[fy-1-y][x] || paper[fy+1+y][x];
+                for (int y = 0; y < foldY && foldY+1+y < paper.length; y++)
+                    newPaper[foldY-1-y][x] = paper[foldY-1-y][x] || paper[foldY+1+y][x];
         }
         return newPaper;
     }
