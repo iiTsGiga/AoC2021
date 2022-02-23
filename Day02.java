@@ -4,7 +4,7 @@ public class Day02 extends AbstractDay {
     private final int[] distances;
 
     public Day02() {
-        super(2);
+        super(2, false);
         directions = new Direction[input.length];
         distances = new int[input.length];
         for (int i = 0; i < input.length; i++) {

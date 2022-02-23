@@ -4,18 +4,23 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public abstract class AbstractDay {
-    private static final String INPUT_PATH = "inputs/";
-    protected final String[] input;
 
-    public AbstractDay(int day) {
+    private static final String INPUT_PATH = "inputs/";
+
+    protected final String[] input;
+    protected final int[] intInput;
+
+    public AbstractDay(int day, boolean toIntArray) {
         input = readFile(day);
+        if (toIntArray) intInput = convertInputToInt();
+        else intInput = new int[0];
     }
 
     public abstract void part1();
     public abstract void part2();
     public abstract void combined();
 
-    protected int[] convertInputToInt() {
+    private int[] convertInputToInt() {
         String[] strNumbers;
         if (input.length > 1) {
             strNumbers = input;

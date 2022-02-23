@@ -7,7 +7,7 @@ public class Day04 extends AbstractDay {
     private final int[][][] boards;
 
     public Day04() {
-        super(4);
+        super(4, false);
         String[] arrStrNums = input[0].split(",");
         rounds = new int[arrStrNums.length];
         for (int i = 0; i < arrStrNums.length; i++)

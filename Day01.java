@@ -1,9 +1,7 @@
 public class Day01 extends AbstractDay {
-    private final int[] intInput;
 
     public Day01() {
-        super(1);
-        intInput = convertInputToInt();
+        super(1, true);
     }
 
     @Override

@@ -3,7 +3,7 @@ public class Day05 extends AbstractDay {
     private final int[][][] lines;
 
     public Day05() {
-        super(5);
+        super(5, false);
         lines = new int[input.length][2][2]; // indices: 1. line, 2. start / end, 3. x / y
         for (int i = 0; i < input.length; i++) {
             String[] startEnd = input[i].split(" -> ");

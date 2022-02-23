@@ -8,7 +8,7 @@ public class Day03 extends AbstractDay {
     private final int BITS_PER_VALUE;
 
     public Day03() {
-        super(3);
+        super(3, false);
         BITS_PER_VALUE = input[0].length();
     }
 
@@ -51,7 +51,7 @@ public class Day03 extends AbstractDay {
         return bitCount;
     }
 
-    private static int[] countBits(List<String> input, int position) {
+    private int[] countBits(List<String> input, int position) {
         int[] bitCount = new int[2];
         for (String strBinary : input) {
             switch (strBinary.charAt(position)) {
