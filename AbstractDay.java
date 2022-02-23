@@ -16,9 +16,15 @@ public abstract class AbstractDay {
     public abstract void combined();
 
     protected int[] convertInputToInt() {
-        int[] intInput = new int[input.length];
+        String[] strNumbers;
+        if (input.length > 1) {
+            strNumbers = input;
+        } else {
+            strNumbers = input[0].split(",");
+        }
+        int[] intInput = new int[strNumbers.length];
         for (int i = 0; i < intInput.length; i++)
-            intInput[i] = Integer.parseInt(input[i]);
+            intInput[i] = Integer.parseInt(strNumbers[i]);
         return intInput;
     }
 
