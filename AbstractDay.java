@@ -10,10 +10,9 @@ public abstract class AbstractDay {
     protected final String[] input;
     protected final int[] intInput;
 
-    public AbstractDay(int day, boolean toIntArray) {
+    public AbstractDay(int day, boolean convertToInt) {
         input = readFile(day);
-        if (toIntArray) intInput = convertInputToInt();
-        else intInput = new int[0];
+        intInput = convertToInt ? convertInputToInt() : new int[0];
     }
 
     public abstract void part1();

@@ -11,7 +11,10 @@ public class Main {
                 new Day07(),
                 new Day08(),
                 new Day09(),
-                new Day10()
+                new Day10(),
+                new Day11(),
+                new Day12(),
+                new Day13()
         };
         long tReadAndProcess = System.currentTimeMillis() - tStart;
 
@@ -19,8 +22,8 @@ public class Main {
         for (AbstractDay day : days) {
             System.out.println("******** " + day.getClass().getName() + " ********");
             long tTmp = System.currentTimeMillis();
-            // day.part1();
-            // day.part2();
+            //day.part1();
+            //day.part2();
             day.combined();
             tCalc += System.currentTimeMillis() - tTmp;
             System.out.println("***********************" + System.lineSeparator());
