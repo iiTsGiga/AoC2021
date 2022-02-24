@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Day13 extends AbstractDay {
 
     private final int[][] dots;
@@ -25,29 +29,43 @@ public class Day13 extends AbstractDay {
 
     @Override
     public void part1() {
-        boolean[][] paper = createPaper();
-        paper = foldPaper(paper, 0);
-        System.out.println("Part 1: " + countDots(paper));
+        ArrayList<int[]> lstDots = new ArrayList<>(dots.length);
+        for (int[] dot : dots) lstDots.add(Arrays.copyOf(dot, 2));
+        foldDots(lstDots, 0);
+        System.out.println("Part 1: " + countDots(createPaper(lstDots)));
     }
 
     @Override
     public void part2() {
-        boolean[][] paper = createPaper();
+        ArrayList<int[]> lstDots = new ArrayList<>(dots.length);
+        for (int[] dot : dots) lstDots.add(Arrays.copyOf(dot, 2));
         for (int i = 0; i < foldDirections.length; i++)
-            paper = foldPaper(paper, i);
+            foldDots(lstDots, i);
         System.out.println("Part 2:");
-        printPaper(paper);
+        printPaper(createPaper(lstDots));
     }
 
     @Override
     public void combined() {
-        boolean[][] paper = createPaper();
-        paper = foldPaper(paper, 0);
-        System.out.println("Part 1: " + countDots(paper));
+        ArrayList<int[]> lstDots = new ArrayList<>(dots.length);
+        for (int[] dot : dots) lstDots.add(Arrays.copyOf(dot, 2));
+        foldDots(lstDots, 0);
+        System.out.println("Part 1: " + countDots(createPaper(lstDots)));
         for (int i = 1; i < foldDirections.length; i++)
-            paper = foldPaper(paper, i);
+            foldDots(lstDots, i);
         System.out.println("Part 2:");
-        printPaper(paper);
+        printPaper(createPaper(lstDots));
+    }
+
+    private boolean[][] createPaper(List<int[]> dots) {
+        int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
+        for (int[] dot : dots) {
+            maxX = Math.max(maxX, dot[0]);
+            maxY = Math.max(maxY, dot[1]);
+        }
+        boolean[][] paper = new boolean[maxY + 1][maxX + 1];
+        for (int[] dot : dots) paper[dot[1]][dot[0]] = true;
+        return paper;
     }
 
     private void printPaper(boolean[][] paper) {
@@ -66,32 +84,14 @@ public class Day13 extends AbstractDay {
         return sum;
     }
 
-    private boolean[][] foldPaper(boolean[][] paper, int foldIndex) {
-        boolean[][] newPaper;
-        if (foldDirections[foldIndex] == Direction.WEST) {
-            int foldX = foldCoordinates[foldIndex];
-            newPaper = new boolean[paper.length][foldX];
-            for (int y = 0; y < newPaper.length; y++)
-                for (int x = 0; x < foldX && foldX+1+x < paper[0].length; x++)
-                    newPaper[y][foldX-1-x] = paper[y][foldX-1-x] || paper[y][foldX+1+x];
-        } else {
-            int foldY = foldCoordinates[foldIndex];
-            newPaper = new boolean[foldY][paper[0].length];
-            for (int x = 0; x < newPaper[0].length; x++)
-                for (int y = 0; y < foldY && foldY+1+y < paper.length; y++)
-                    newPaper[foldY-1-y][x] = paper[foldY-1-y][x] || paper[foldY+1+y][x];
+    private void foldDots(List<int[]> dots, int foldId) {
+        int coordinate = foldCoordinates[foldId];
+        int whichCoordinate = foldDirections[foldId] == Direction.WEST ? 0 : 1;
+        for (int i = 0; i < dots.size(); i++) {
+            if (dots.get(i)[whichCoordinate] > coordinate) {
+                dots.get(i)[whichCoordinate] = 2 * coordinate - dots.get(i)[whichCoordinate];
+                if (dots.get(i)[whichCoordinate] < 0) dots.remove(i--);
+            }
         }
-        return newPaper;
-    }
-
-    private boolean[][] createPaper() {
-        int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
-        for (int[] dot : dots) {
-            maxX = Math.max(maxX, dot[0]);
-            maxY = Math.max(maxY, dot[1]);
-        }
-        boolean[][] paper = new boolean[maxY+1][maxX+1];
-        for (int[] dot : dots) paper[dot[1]][dot[0]] = true;
-        return paper;
     }
 }

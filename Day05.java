@@ -56,32 +56,30 @@ public class Day05 extends AbstractDay {
     }
 
     private int[][][] getCounterMaps() {
-        int minX = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE, minY = Integer.MAX_VALUE, maxY = Integer.MIN_VALUE;
+        int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
         for (int[][] line : lines)
             for (int[] point : line) {
-                minX = Math.min(point[0], minX);
-                minY = Math.min(point[1], minY);
                 maxX = Math.max(point[0], maxX);
                 maxY = Math.max(point[1], maxY);
             }
-        int[][][] counterMap = new int[2][maxY - minY + 1][maxX - minX + 1];
+        int[][][] counterMap = new int[2][maxY + 1][maxX + 1];
         for (int[][] line : lines) {
             if (line[0][0] == line[1][0]) {  // vertical line
                 for (int y = line[0][1]; y <= line[1][1]; y++) {
-                    counterMap[0][y - minY][line[0][0] - minX]++;
+                    counterMap[0][y][line[0][0]]++;
                 }
             } else if (line[0][1] == line[1][1]) {  // horizontal line
                 for (int x = line[0][0]; x <= line[1][0]; x++) {
-                    counterMap[0][line[0][1] - minY][x - minX]++;
+                    counterMap[0][line[0][1]][x]++;
                 }
             } else {
                 if (line[0][0] < line[1][0]) {  // diagonal top left to bottom right
                     for (int y = line[0][1], x = line[0][0]; y <= line[1][1]; x++, y++) {
-                        counterMap[1][y - minY][x - minY]++;
+                        counterMap[1][y][x]++;
                     }
                 } else {  // diagonal top right to bottom left
                     for (int y = line[0][1], x = line[0][0]; y <= line[1][1]; x--, y++) {
-                        counterMap[1][y - minY][x - minY]++;
+                        counterMap[1][y][x]++;
                     }
                 }
             }

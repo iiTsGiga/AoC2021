@@ -45,9 +45,8 @@ public class Day03 extends AbstractDay {
     private int[][] countAllBits() {
         int[][] bitCount = new int[BITS_PER_VALUE][2];
         List<String> inputLst = Arrays.asList(input);
-        for (int bitIndex = 0; bitIndex < BITS_PER_VALUE; bitIndex++) {
+        for (int bitIndex = 0; bitIndex < BITS_PER_VALUE; bitIndex++)
             bitCount[bitIndex] = countBits(inputLst, bitIndex);
-        }
         return bitCount;
     }
 
@@ -66,10 +65,8 @@ public class Day03 extends AbstractDay {
     private void filterRatings(List<String> ratings, boolean isOxygen) {
         for (int bitIndex = 0; bitIndex < BITS_PER_VALUE && ratings.size() > 1; bitIndex++) {
             int[] bitCount = countBits(ratings, bitIndex);
-            String regex = "^" + ".".repeat(bitIndex);
-            regex += (isOxygen && bitCount[1] >= bitCount[0]) || (!isOxygen && bitCount[1] < bitCount[0]) ? 1 : 0;
             for (int j = 0; j < ratings.size(); j++)
-                if (!ratings.get(j).matches(regex + ".*"))
+                if (ratings.get(j).charAt(bitIndex) != ((isOxygen && bitCount[1] >= bitCount[0]) || (!isOxygen && bitCount[1] < bitCount[0]) ? '1' : '0'))
                     ratings.remove(j--);
         }
     }

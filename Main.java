@@ -22,10 +22,12 @@ public class Main {
         for (AbstractDay day : days) {
             System.out.println("******** " + day.getClass().getName() + " ********");
             long tTmp = System.currentTimeMillis();
-            //day.part1();
-            //day.part2();
+            // day.part1();
+            // day.part2();
             day.combined();
-            tCalc += System.currentTimeMillis() - tTmp;
+            tTmp = System.currentTimeMillis() - tTmp;
+            tCalc += tTmp;
+            System.out.println("Calculation took " + tTmp + "ms");
             System.out.println("***********************" + System.lineSeparator());
         }
         System.out.println("Reading and processing input took " + tReadAndProcess + "ms");
