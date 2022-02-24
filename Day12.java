@@ -4,62 +4,70 @@ import java.util.List;
 
 public class Day12 extends AbstractDay {
 
-    private final HashMap<String, List<String>> neighbours;
+    private final int[][] neighbours;
+    private final boolean[] isLowerCase;
+    private final int startNodeId, endNodeId;
 
     public Day12() {
         super(12, false);
-        neighbours = new HashMap<>();
+        HashMap<String, List<String>> neighboursMap = new HashMap<>();
         for (String line : input) {
             String[] nodes = line.split("-");
-            if (!neighbours.containsKey(nodes[0]))
-                neighbours.put(nodes[0], new LinkedList<>());
-            if (!neighbours.containsKey(nodes[1]))
-                neighbours.put(nodes[1], new LinkedList<>());
-            neighbours.get(nodes[0]).add(nodes[1]);
-            neighbours.get(nodes[1]).add(nodes[0]);
+            if (!neighboursMap.containsKey(nodes[0]))
+                neighboursMap.put(nodes[0], new LinkedList<>());
+            if (!neighboursMap.containsKey(nodes[1]))
+                neighboursMap.put(nodes[1], new LinkedList<>());
+            neighboursMap.get(nodes[0]).add(nodes[1]);
+            neighboursMap.get(nodes[1]).add(nodes[0]);
         }
+        HashMap<String, Integer> nodeIds = new HashMap<>();
+        for (String node : neighboursMap.keySet())
+            nodeIds.put(node, nodeIds.size());
+        neighbours = new int[nodeIds.size()][];
+        isLowerCase = new boolean[nodeIds.size()];
+        for (String node : nodeIds.keySet()) {
+            int id = nodeIds.get(node);
+            neighbours[id] = new int[neighboursMap.get(node).size()];
+            isLowerCase[id] = node.charAt(0) >= 'a';
+            for (int i = 0; i  < neighbours[id].length; i++) {
+                neighbours[id][i] = nodeIds.get(neighboursMap.get(node).get(i));
+            }
+        }
+        startNodeId = nodeIds.get("start");
+        endNodeId = nodeIds.get("end");
     }
 
     @Override
     public void part1() {
-        HashMap<String, Integer> visitCounters = new HashMap<>();
-        for (String node : neighbours.keySet())
-            visitCounters.put(node, 0);
-        System.out.println("Part 1: " + getAmtPaths("start", visitCounters, 1));
+        int[] visitCounters = new int[neighbours.length];
+        System.out.println("Part 1: " + getAmtPaths(startNodeId, visitCounters, 1));
     }
 
     @Override
     public void part2() {
-        HashMap<String, Integer> visitCounters = new HashMap<>();
-        for (String node : neighbours.keySet())
-            visitCounters.put(node, 0);
-        visitCounters.replace("start", 1);
-        System.out.println("Part 2: " + getAmtPaths("start", visitCounters, 2));
+        int[] visitCounters = new int[neighbours.length];
+        visitCounters[startNodeId] = 1;
+        System.out.println("Part 2: " + getAmtPaths(startNodeId, visitCounters, 2));
     }
 
     @Override
     public void combined() {
-        HashMap<String, Integer> visitCounters = new HashMap<>();
-        for (String node : neighbours.keySet())
-            visitCounters.put(node, 0);
-        System.out.println("Part 1: " + getAmtPaths("start", visitCounters, 1));
-        for (String node : neighbours.keySet())
-            visitCounters.replace(node, 0);
-        visitCounters.replace("start", 1);
-        System.out.println("Part 2: " + getAmtPaths("start", visitCounters, 2));
+        int[] visitCounters = new int[neighbours.length];
+        System.out.println("Part 1: " + getAmtPaths(startNodeId, visitCounters, 1));
+        visitCounters[startNodeId] = 1;
+        System.out.println("Part 2: " + getAmtPaths(startNodeId, visitCounters, 2));
     }
 
-    private int getAmtPaths(String curNode, HashMap<String, Integer> visitCounters, int maxVisits) {
-        if (curNode.equals("end")) return 1;
+    private int getAmtPaths(int curNodeId, int[] visitCounters, int maxVisits) {
+        if (curNodeId == endNodeId) return 1;
         int amtPaths = 0;
-        int visits = visitCounters.get(curNode);
-        maxVisits = curNode.charAt(0) >= 'a' && visits == 1 && !curNode.equals("start") ? 1 : maxVisits;
-        visitCounters.replace(curNode, visits + 1);
-        for (String neighbourNode : neighbours.get(curNode)) {
-            if (neighbourNode.charAt(0) <= 'Z' || visitCounters.get(neighbourNode) < maxVisits)
-                amtPaths += getAmtPaths(neighbourNode, visitCounters, maxVisits);
+        maxVisits = isLowerCase[curNodeId] && visitCounters[curNodeId] == 1 && curNodeId != startNodeId ? 1 : maxVisits;
+        visitCounters[curNodeId]++;
+        for (int neighbourNodeId : neighbours[curNodeId]) {
+            if (!isLowerCase[neighbourNodeId] || visitCounters[neighbourNodeId] < maxVisits)
+                amtPaths += getAmtPaths(neighbourNodeId, visitCounters, maxVisits);
         }
-        visitCounters.replace(curNode, visits);
+       visitCounters[curNodeId]--;
         return amtPaths;
     }
 }
